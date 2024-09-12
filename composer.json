@@ -1,5 +1,5 @@
 {
-    "name": "keysms/laravel",
+    "name": "keysms/keysms",
     "require": {
         "illuminate/support": ">=8.0",
         "illuminate/container": ">=8.0",
