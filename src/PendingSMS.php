@@ -14,6 +14,7 @@ final class PendingSMS implements JsonSerializable, Jsonable
 {
     public static ?string $defaultSender = null;
 
+    protected $response = null;
     protected ?string $message = null;
     protected ?string $sender = null;
     protected array $receivers = [];
@@ -78,9 +79,12 @@ final class PendingSMS implements JsonSerializable, Jsonable
      */
     public function send(): SMS
     {
-        $response = KeySMS::post('/messages', $this->jsonSerialize());
-        $this->sent = true;
-        return new SMS($response['message'], $this);
+        if (!$this->sent) {
+            $this->response = KeySMS::post('/messages', $this->jsonSerialize())['message'];
+            $this->sent = true;
+        }
+
+        return new SMS($this->response, $this);
     }
 
     /**
