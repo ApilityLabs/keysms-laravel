@@ -40,7 +40,7 @@ final class SMS implements Jsonable
 
   public static function __callStatic($name, $arguments)
   {
-    $pendingSMS = (new static)
+    return (new static)
       ->forwardCallTo(new PendingSMS, $name, $arguments);
   }
 
