@@ -6,6 +6,8 @@ use DateTime;
 use DateTimeInterface;
 
 use Illuminate\Support\Traits\ForwardsCalls;
+use Illuminate\Contracts\Support\Jsonable;
+
 use KeySMS\Facades\KeySMS;
 use KeySMS\Traits\Attributes;
 
@@ -26,7 +28,7 @@ use KeySMS\Traits\Attributes;
  * @method static PendingSMS to(string|string[] $receivers)
  * @method static PendingSMS withOptions(array $options)
  */
-final class SMS
+final class SMS implements Jsonable
 {
   use Attributes;
   use ForwardsCalls;

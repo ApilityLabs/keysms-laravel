@@ -73,4 +73,9 @@ trait Attributes
     {
         return isset($this->attributes[$this->primaryKey]);
     }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this->attributes, $options);
+    }
 }
