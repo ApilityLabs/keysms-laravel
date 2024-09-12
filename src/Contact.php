@@ -101,7 +101,7 @@ class Contact implements Stringable, PhoneNumberContract, UrlRoutable
      */
     public function resolveRouteBinding($value, $field = null)
     {
-        if ($field !== 'id') {
+        if ($field && $field !== 'id') {
             return null;
         }
 
