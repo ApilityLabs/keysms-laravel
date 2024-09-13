@@ -3,6 +3,7 @@
 namespace KeySMS;
 
 use Stringable;
+use JsonSerializable;
 
 use KeySMS\Traits\Rest;
 use KeySMS\Contracts\PhoneNumber as PhoneNumberContract;
@@ -10,13 +11,14 @@ use KeySMS\Contracts\PhoneNumber as PhoneNumberContract;
 use Brick\PhoneNumber\PhoneNumber;
 
 use Illuminate\Contracts\Routing\UrlRoutable;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 
 /**
  * @property ?string $name
  * @property-read ?string $phone
  */
-class Contact implements Stringable, PhoneNumberContract, UrlRoutable, Jsonable
+final class Contact implements Stringable, PhoneNumberContract, UrlRoutable, Jsonable, Arrayable, JsonSerializable
 {
     use Rest;
 

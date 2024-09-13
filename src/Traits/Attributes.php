@@ -74,8 +74,18 @@ trait Attributes
         return isset($this->attributes[$this->primaryKey]);
     }
 
+    public function toArray()
+    {
+        return $this->attributes;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
+    }
+
     public function toJson($options = 0)
     {
-        return json_encode($this->attributes, $options);
+        return json_encode($this->jsonSerialize(), $options);
     }
 }

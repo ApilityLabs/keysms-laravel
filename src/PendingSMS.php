@@ -5,12 +5,13 @@ namespace KeySMS;
 use DateTimeInterface;
 use JsonSerializable;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+
 use KeySMS\Exception\Exception;
 use KeySMS\Facades\KeySMS;
 
-use Illuminate\Contracts\Support\Jsonable;
-
-final class PendingSMS implements JsonSerializable, Jsonable
+final class PendingSMS implements Arrayable, JsonSerializable, Jsonable
 {
     public static ?string $defaultSender = null;
 
@@ -100,7 +101,7 @@ final class PendingSMS implements JsonSerializable, Jsonable
         return $this->send();
     }
 
-    public function jsonSerialize(): mixed
+    public function toArray()
     {
         $date = null;
         $time = null;
@@ -130,6 +131,11 @@ final class PendingSMS implements JsonSerializable, Jsonable
             'date' => $date,
             'time' => $time,
         ]);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 
     public function toJson($options = 0)
