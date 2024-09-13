@@ -42,7 +42,6 @@ trait Rest
         return new static(
             KeySMS::get(
                 sprintf('/%s/%s', static::endpoint(), $id),
-                validate: fn(array $response) => !array_key_exists(static::responseKey(), $response)
             )[static::responseKey()]
         );
     }
@@ -72,7 +71,6 @@ trait Rest
             array_values(
                 KeySMS::get(
                     sprintf('/%s', static::endpoint()),
-                    validate: fn(array $response) => !array_key_exists($key, $response)
                 )[$key]
             )
         );

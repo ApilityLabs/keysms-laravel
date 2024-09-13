@@ -47,7 +47,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function get(string $endpoint, array $query = [], ?Closure $validate = null): array
+    public function get(string $endpoint, array $query = []): array
     {
         $uri = sprintf('%s/%s?%s', trim($this->options['host'], '/'), trim($endpoint, '/'), http_build_query($query));
 
@@ -58,13 +58,13 @@ class Client
         ])
             ->throw();
 
-        return $this->throwOnError($response, $validate);
+        return $this->throwOnError($response);
     }
 
     /**
      * @throws Exception
      */
-    public function post(string $endpoint, array $payload, ?Closure $validate = null): array
+    public function post(string $endpoint, array $payload): array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
@@ -75,13 +75,13 @@ class Client
         ])
             ->throw();
 
-        return $this->throwOnError($response, $validate);
+        return $this->throwOnError($response);
     }
 
     /**
      * @throws Exception
      */
-    public function put(string $endpoint, array $payload, ?Closure $validate = null): array
+    public function put(string $endpoint, array $payload): array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
@@ -92,13 +92,13 @@ class Client
         ])
             ->throw();
 
-        return $this->throwOnError($response, $validate);
+        return $this->throwOnError($response);
     }
 
     /**
      * @throws Exception
      */
-    public function delete(string $endpoint, ?Closure $validate = null): array
+    public function delete(string $endpoint): array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
@@ -109,6 +109,6 @@ class Client
         ])
             ->throw();
 
-        return $this->throwOnError($response, $validate);
+        return $this->throwOnError($response);
     }
 }

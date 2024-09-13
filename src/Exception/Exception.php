@@ -3,8 +3,10 @@
 namespace KeySMS\Exception;
 
 use Exception as BaseException;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Client\Response;
 
-abstract class Exception extends BaseException
+abstract class Exception extends BaseException implements Responsable
 {
     const AUTHENTICATION_EXCEPTION = 'not_authed';
     const CREDENTIALS_NOT_SET_EXCEPTION = 'credentials_not_set';
@@ -26,22 +28,50 @@ abstract class Exception extends BaseException
         self::INVALID_RECEIVERS => InvalidReceiversException::class,
     ];
 
-    public static function from($code, $response = null): ?BaseException
+    public function __construct(protected Response $response)
     {
-        if (is_array($code)) {
-            foreach ($code as $error) {
+        parent::__construct(class_basename(static::class));
+    }
+
+    public static function from(Response $response): ?BaseException
+    {
+        $code = static::parseResponseErrorCode($response);
+
+        if (isset(static::EXCEPTIONS[$code])) {
+            $exception = static::EXCEPTIONS;
+            return new $exception[$code]($response, $code);
+        }
+
+        return null;
+    }
+
+    public function getResponse(): Response
+    {
+        return $this->response;
+    }
+
+    public function toResponse($request)
+    {
+        return response()
+            ->json($this->response->json())
+            ->setStatusCode($this->response->status());
+    }
+
+    /**
+     * @throws BaseException 
+     */
+    protected static function parseResponseErrorCode(Response $response): string
+    {
+        $data = $response->json();
+
+        if (isset($data['error'])) {
+            foreach ($data['error'] as $error) {
                 if (isset($error['code'])) {
-                    $code = $error['code'];
-                    break;
+                    return $error['code'];
                 }
             }
         }
 
-        if (isset(static::EXCEPTIONS[$code])) {
-            $exception = static::EXCEPTIONS;
-            return new $exception[$code]($response['error'] ?? null);
-        }
-
-        return null;
+        throw new BaseException('Unable to parse error code from response');
     }
 }
