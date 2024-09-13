@@ -2,13 +2,12 @@
 
 namespace KeySMS\Traits;
 
-use Closure;
 use KeySMS\Exception\Exception;
 use Illuminate\Http\Client\Response;
 
 trait ThrowOnError
 {
-    protected function throwOnError(Response $response, ?Closure $validate = null): array
+    protected function throwOnError(Response $response): ?array
     {
         if (!$this->responseOk($response)) {
             throw Exception::from($response);

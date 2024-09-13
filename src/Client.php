@@ -47,7 +47,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function get(string $endpoint, array $query = []): array
+    public function get(string $endpoint, array $query = []): ?array
     {
         $uri = sprintf('%s/%s?%s', trim($this->options['host'], '/'), trim($endpoint, '/'), http_build_query($query));
 
@@ -64,7 +64,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function post(string $endpoint, array $payload): array
+    public function post(string $endpoint, array $payload): ?array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
@@ -81,7 +81,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function put(string $endpoint, array $payload): array
+    public function put(string $endpoint, array $payload): ?array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
@@ -98,7 +98,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function delete(string $endpoint): array
+    public function delete(string $endpoint): ?array
     {
         $uri = sprintf('%s/%s', trim($this->options['host'], '/'), trim($endpoint, '/'));
 
