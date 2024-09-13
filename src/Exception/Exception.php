@@ -16,6 +16,7 @@ abstract class Exception extends BaseException implements Responsable
     const QUOTA_EXCEEDED = 'Account limit exceeded';
     const INVALID_RESPONSE = 'invalid_response';
     const INVALID_RECEIVERS = 'message_no_valid_receivers';
+    const CONTACT_ALREADY_EXISTS = '11000';
 
     const EXCEPTIONS = [
         self::AUTHENTICATION_EXCEPTION => AuthenticationException::class,
@@ -26,6 +27,7 @@ abstract class Exception extends BaseException implements Responsable
         self::QUOTA_EXCEEDED => QuotaExceededException::class,
         self::INVALID_RESPONSE => InvalidResponseException::class,
         self::INVALID_RECEIVERS => InvalidReceiversException::class,
+        self::CONTACT_ALREADY_EXISTS => ContactAlreadyExistsException::class,
     ];
 
     public function __construct(protected Response $response)
@@ -42,7 +44,7 @@ abstract class Exception extends BaseException implements Responsable
             return new $exception[$code]($response, $code);
         }
 
-        return null;
+        return new ErrorException($response);
     }
 
     public function getResponse(): Response
@@ -63,6 +65,10 @@ abstract class Exception extends BaseException implements Responsable
     protected static function parseResponseErrorCode(Response $response): string
     {
         $data = $response->json();
+
+        if (isset($data['debug']['exceptionCode'])) {
+            return $data['debug']['exceptionCode'];
+        }
 
         if (isset($data['error'])) {
             foreach ($data['error'] as $error) {
