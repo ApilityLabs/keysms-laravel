@@ -39,11 +39,15 @@ trait Rest
 
     public static function find(string $id): ?static
     {
-        return new static(
-            KeySMS::get(
-                sprintf('/%s/%s', static::endpoint(), $id),
-            )[static::responseKey()]
+        $response = KeySMS::get(
+            sprintf('/%s/%s', static::endpoint(), $id),
         );
+
+        if ($response !== null && isset($response[static::responseKey()])) {
+            return new static($response[static::responseKey()]);
+        }
+
+        return null;
     }
 
     /**
