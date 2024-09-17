@@ -5,9 +5,12 @@ namespace KeySMS\Exception;
 use Exception as BaseException;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Client\Response;
+use KeySMS\Contracts\StatusCode;
 
-abstract class Exception extends BaseException implements Responsable
+abstract class Exception extends BaseException implements Responsable, StatusCode
 {
+    protected int $statusCode = 500;
+
     const AUTHENTICATION_EXCEPTION = 'not_authed';
     const CREDENTIALS_NOT_SET_EXCEPTION = 'credentials_not_set';
     const NOT_POSSIBLE_TO_DELETE_ALREADY_SENT_MESSAGE = 'Not possible to delete already sent message';
@@ -47,6 +50,11 @@ abstract class Exception extends BaseException implements Responsable
         return new ErrorException($response);
     }
 
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
     public function getResponse(): Response
     {
         return $this->response;
@@ -56,7 +64,7 @@ abstract class Exception extends BaseException implements Responsable
     {
         return response()
             ->json($this->response->json())
-            ->setStatusCode($this->response->status());
+            ->setStatusCode($this->getStatusCode());
     }
 
     /**
